@@ -1,5 +1,8 @@
 # axen-form Skill Authoring Project
 
+> 🔗 **Playground Demo:** https://stackblitz.com/~/github.com/nasirBataruna/axen-form-playground
+
+
 Comprehensive skill-authoring workspace for `@axenstudio/axen-form`, including:
 - Skill definition (`SKILL.md`) for AI-assisted guidance.
 - Metadata for agent discovery (`agents/openai.yaml`).
