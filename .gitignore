@@ -27,3 +27,6 @@ pnpm-debug.log*
 Thumbs.db
 \n# Backup folder
 .backup/
+
+# Playground repo (mirrored to stackblitz)
+axen-form-playground/
