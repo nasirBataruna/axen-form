@@ -21,15 +21,15 @@ Form didefinisikan sebagai array config, reactive store bawaan mengelola state, 
 
 **Jangan gunakan jika:** form tidak menggunakan AxenForm, atau project sudah pakai CronoForm (Formik+MUI engine).
 
-## Implementation Requirement
+## Installation
 
-- **Use official npm package:** Agents and contributors MUST use the official npm package `@axenstudio/axen-form` for any implementation, example code, or dependency reference. Always install from the npm registry and reference the package name exactly.
-- **Verify before use:** Before generating examples or adding the dependency, verify the package exists and use the latest stable version published on https://www.npmjs.com/package/@axenstudio/axen-form. Do not use local forks, unpublished tarballs, or renamed packages unless explicitly approved.
- - **Package manager requirement (pnpm):** Agents and contributors MUST use `pnpm` for installing and managing `@axenstudio/axen-form` in examples, templates, and project manifests. Use `pnpm add @axenstudio/axen-form` for installation, and prefer `pnpm`-native workflows (`pnpm install`, `pnpm update`, workspace features) when demonstrating or scaffolding projects.
- - **Verify before use:** Before generating examples or adding the dependency, verify the package exists on the public registry and use the latest stable version. Prefer verification via the npmjs page (https://www.npmjs.com/package/@axenstudio/axen-form) or `pnpm info @axenstudio/axen-form`.
- - **Do not use alternate sources:** Do not use local forks, unpublished tarballs, renamed packages, or alternative registries unless explicitly approved. All official examples and CI should reference the package installed via `pnpm` from the public registry.
+```bash
+pnpm add @axenstudio/axen-form
+# optional: pnpm add yup   (for Yup adapter)
+# optional: pnpm add zod   (for Zod adapter)
+```
 
-This policy ensures consistent, auditable usage of the official AxenForm distribution and enforces the workspace's package manager standard (`pnpm`).
+Official npm package: https://www.npmjs.com/package/@axenstudio/axen-form. Always use `pnpm`.
 
 
 ---
@@ -128,18 +128,9 @@ Props tambahan per tipe:
 
 ## Layout System
 
-5 layout components tersedia untuk CSS Grid dan Flexbox layout:
+Built-in layout primitives (importable from `@axenstudio/axen-form`): `Grid` (CSS Grid), `Box` (flex), `Stack` (directional flex), `Spacer`, `Divider`.
 
-| Component | Fungsi |
-|---|---|
-| `Grid` | CSS Grid container, prop `columns`/`spacing`/responsive size |
-| `Box` | Flex container, prop `display`/`gap`/`direction` |
-| `Stack` | Vertical/horizontal stack, shortcut untuk Box flex |
-| `Spacer` | Flex grow spacer (`grow`) atau fixed gap (`gap`) |
-| `Divider` | Horizontal/vertical separator, optional `label` |
-
-AxenForm memiliki CSS Grid built-in (12 kolom default) via `columns` dan `gap` props.
-Per-field layout via `colSpan` (number atau responsive object `{ xs, sm, md, lg, xl }`).
+Form uses 12-column CSS Grid by default. `gap` prop sets spacing between rows. Per-field span via `colSpan` — a number (`6`) or responsive object `{ xs: 12, md: 6 }`.
 
 ### Field Groups / Sections
 
@@ -181,44 +172,25 @@ Group fields inherit parent grid flow via CSS `display: contents`.
 | `green` | Green (#2e7d32) | Nature/eco themed apps |
 
 ```tsx
-// Built-in theme
-<AxenForm theme="default" ... />
-<AxenForm theme="subtle" ... />
-<AxenForm theme="green" ... />
+// Built-in presets
+<AxenForm theme="default" ... />   // blue  (#1976d2)
+<AxenForm theme="subtle"  ... />   // gray  (#546e7a)
+<AxenForm theme="green"   ... />   // green (#2e7d32)
 
-// Custom theme — set CSS variables on parent
-<div style={{
-  '--axen-color-primary': '#ff6b6b',
-  '--axen-color-primary-hover': '#ee5a5a',
-  '--axen-color-primary-light': '#ffe8e8',
-} as React.CSSProperties}>
-  <AxenForm theme="custom-coral" ... />
-</div>
+// Custom theme — define CSS rule, pass name to theme prop
+// [data-axen-theme='brand'] { --axen-color-primary: #e74c3c; ... }
+<AxenForm theme="brand" ... />
 
-// Dark mode — override CSS tokens pada wrapper element
-// AxenForm adalah light-only by default; dark mode diterapkan consumer-side
-// [data-axen-theme] di dalam .dark-mode akan pakai token ini:
+// Dark mode — wrap with class + override tokens in CSS
+// .dark-mode [data-axen-theme] { --axen-color-bg: #1e1e1e; ... }
 <div className={isDark ? 'dark-mode' : ''}>
   <AxenForm theme="default" ... />
 </div>
 ```
 
-```css
-/* Dark mode token override (tambahkan di global CSS consumer) */
-.dark-mode [data-axen-theme] {
-  --axen-color-bg: #1e1e1e;
-  --axen-color-input-bg: #2a2a2a;
-  --axen-color-text: #e0e0e0;
-  --axen-color-label: #b0c4de;
-  --axen-color-border: #444;
-  --axen-color-text-secondary: #999;
-  --axen-color-bg-disabled: #333;
-  --axen-color-bg-hover: #333;
-  color-scheme: dark;
-}
-```
+AxenForm injects `data-axen-theme="{value}"` on its container. CSS rules targeting that selector apply automatically.
 
-Theme menginject via `data-axen-theme` attribute. Custom theme hanya perlu override CSS variables `--axen-color-*`.
+→ Full token list + dark mode CSS + per-theme values: `references/theme-tokens.md`
 
 → Full token catalog: `references/theme-tokens.md`
 
@@ -542,6 +514,11 @@ const steps: Step[] = [
   ]},
 ]
 
+const initialValues: Record<string, unknown> = {
+  firstName: '', lastName: '', email: '',
+  street: '', city: '', zipCode: '',
+}
+
 export default function StepperForm() {
   const formRef = useRef<AxenFormRef>(null)
   const [currentStep, setCurrentStep] = useState(0)
@@ -601,49 +578,130 @@ interface StepDef {
 }
 
 const ALL_STEPS: StepDef[] = [
-  { id: 'account', title: 'Account Type', fields: [...] },
+  {
+    id: 'account', title: 'Account Type',
+    fields: [
+      { name: 'accountType', label: 'Account Type', type: 'radio', required: true, colSpan: 12,
+        options: [{ value: 'personal', label: 'Personal' }, { value: 'business', label: 'Business' }],
+        helperText: 'Choosing "Business" adds a Company Info step.' },
+      { name: 'fullName', label: 'Full Name', type: 'text',  required: true, colSpan: 12 },
+      { name: 'email',    label: 'Email',     type: 'email', required: true, colSpan: 6  },
+      { name: 'phone',    label: 'Phone',     type: 'tel',   colSpan: 6 },
+    ],
+  },
   {
     id: 'company', title: 'Company Info',
-    condition: (values) => values.accountType === 'business',  // only shown for business
-    fields: [...],
+    condition: (values) => values.accountType === 'business',  // conditional: only shown for business
+    fields: [
+      { name: 'companyName', label: 'Company Name', type: 'text',   required: true, colSpan: 12 },
+      { name: 'companySize', label: 'Company Size', type: 'select', required: true, colSpan: 6,
+        options: [{ value: '1-10', label: '1–10' }, { value: '11-50', label: '11–50' }, { value: '200+', label: '200+' }] },
+      { name: 'taxId',   label: 'Tax ID',  type: 'text', colSpan: 6 },
+    ],
   },
-  { id: 'address', title: 'Address', fields: [...] },
+  {
+    id: 'address', title: 'Address',
+    fields: [
+      { name: 'street',  label: 'Street',   type: 'text', required: true, colSpan: 12 },
+      { name: 'city',    label: 'City',     type: 'text', required: true, colSpan: 4  },
+      { name: 'zipCode', label: 'Zip Code', type: 'text', required: true, colSpan: 4  },
+      { name: 'country', label: 'Country',  type: 'select', required: true, colSpan: 4,
+        options: [{ value: 'ID', label: 'Indonesia' }, { value: 'US', label: 'United States' }, { value: 'SG', label: 'Singapore' }] },
+    ],
+  },
+  {
+    id: 'prefs', title: 'Preferences',
+    fields: [
+      { name: 'newsletter',    label: 'Subscribe to newsletter',          type: 'checkbox', colSpan: 12 },
+      { name: 'termsAccepted', label: 'I accept the terms and conditions', type: 'checkbox', required: true, colSpan: 12 },
+    ],
+  },
 ]
 
-// Filter visible steps dynamically based on current values
-const activeSteps = useMemo(
-  () => ALL_STEPS.filter(s => !s.condition || s.condition(formValues)),
-  [formValues]
-)
-
-// Clamp step index if a conditional step disappears
-const safeStep = Math.min(currentStep, activeSteps.length - 1)
-
-type StepStatus = 'pending' | 'valid' | 'invalid'
-const [stepStatuses, setStepStatuses] = useState<Record<string, StepStatus>>({})
-
-const handleStepSubmit = (values: Record<string, unknown>) => {
-  const merged = { ...formValues, ...values }
-  setFormValues(merged)
-  setStepStatuses(prev => ({ ...prev, [activeSteps[safeStep].id]: 'valid' }))
-  if (safeStep < activeSteps.length - 1) {
-    setCurrentStep(s => s + 1)
-  } else {
-    setShowReview(true)   // show review summary before final submit
-  }
+const initialValues: Record<string, unknown> = {
+  accountType: '', fullName: '', email: '', phone: '',
+  companyName: '', companySize: '', taxId: '',
+  street: '', city: '', zipCode: '', country: '',
+  newsletter: false, termsAccepted: false,
 }
 
-// "Next": goes through submit() — onSubmit only fires if validation passes
-<button onClick={() => formRef.current?.submit()}>Next →</button>
+export default function StepperComplex() {
+  const formRef = useRef<AxenFormRef>(null)
+  const [currentStep, setCurrentStep] = useState(0)
+  const [formValues, setFormValues] = useState(initialValues)
+  const [showReview, setShowReview] = useState(false)
 
-// Click-to-jump: allow only previously visited steps
-const handleJumpToStep = (index: number) => {
-  if (index <= safeStep || stepStatuses[activeSteps[index].id]) {
-    const current = formRef.current?.getValues()
-    if (current) setFormValues(prev => ({ ...prev, ...current }))
-    setShowReview(false)
-    setCurrentStep(index)
+  // Filter visible steps dynamically based on current values
+  const activeSteps = useMemo(
+    () => ALL_STEPS.filter(s => !s.condition || s.condition(formValues)),
+    [formValues]
+  )
+
+  // Clamp step index if a conditional step disappears
+  const safeStep = Math.min(currentStep, activeSteps.length - 1)
+
+  type StepStatus = 'pending' | 'valid' | 'invalid'
+  const [stepStatuses, setStepStatuses] = useState<Record<string, StepStatus>>({})
+
+  const handleStepSubmit = (values: Record<string, unknown>) => {
+    const merged = { ...formValues, ...values }
+    setFormValues(merged)
+    setStepStatuses(prev => ({ ...prev, [activeSteps[safeStep].id]: 'valid' }))
+    if (safeStep < activeSteps.length - 1) {
+      setCurrentStep(s => s + 1)
+    } else {
+      setShowReview(true)   // show review summary before final submit
+    }
   }
+
+  // Click-to-jump: allow only previously visited steps
+  const handleJumpToStep = (index: number) => {
+    if (index <= safeStep || stepStatuses[activeSteps[index].id]) {
+      const current = formRef.current?.getValues()
+      if (current) setFormValues(prev => ({ ...prev, ...current }))
+      setShowReview(false)
+      setCurrentStep(index)
+    }
+  }
+
+  return (
+    <>
+      {/* Step indicator with click-to-jump */}
+      {activeSteps.map((step, i) => (
+        <button key={step.id} onClick={() => handleJumpToStep(i)}
+          style={{ fontWeight: i === safeStep ? 'bold' : 'normal' }}>
+          {step.title} {stepStatuses[step.id] === 'valid' ? '✓' : ''}
+        </button>
+      ))}
+
+      {!showReview ? (
+        <>
+          <AxenForm
+            ref={formRef}
+            key={activeSteps[safeStep].id}
+            config={{ fields: activeSteps[safeStep].fields, initialValues: formValues }}
+            components={defaultComponentMap}
+            onSubmit={handleStepSubmit}
+          />
+          <button onClick={() => {
+            const current = formRef.current?.getValues()
+            if (current) setFormValues(prev => ({ ...prev, ...current }))
+            setCurrentStep(s => Math.max(0, s - 1))
+          }} disabled={safeStep === 0}>← Previous</button>
+          {/* "Next" triggers submit → onSubmit only fires if validation passes */}
+          <button onClick={() => formRef.current?.submit()}>
+            {safeStep < activeSteps.length - 1 ? 'Next →' : 'Review'}
+          </button>
+        </>
+      ) : (
+        <div>
+          <pre>{JSON.stringify(formValues, null, 2)}</pre>
+          <button onClick={() => setShowReview(false)}>← Back</button>
+          <button onClick={() => console.log('Final submit:', formValues)}>Submit</button>
+        </div>
+      )}
+    </>
+  )
 }
 ```
 

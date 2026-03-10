@@ -1,13 +1,13 @@
 # Current Focus
 
-- **Status**: Skill published — SKILL.md updated post-playground
+- **Status**: Skill published (v2, 68 chunks) — wrong facts corrected + Stepper Complex filled + pruned
 - **Bootstrap mode**: skill-authoring
 - **Project**: axen-form (skill for @axenstudio/axen-form)
-- **Phase**: Step 4 — Content finalized, RAG reindex + git commit
+- **Phase**: Step 6 complete — skill published and indexed
 - **Last Updated**: 2026-03-10
 
-## What Changed
-- SKILL.md: 20→19 field types, added Field Groups/Sections, Theme System, Custom Registration patterns
-- SKILL.md: fixed hidden field validation pitfall, updated playground reference to 13 scenarios
-- Playground: 13 scenarios (01-basic → 12-custom-registration) with breakpoint simulator, source code tabs
-- Library: simpleValidator now skips hidden field validation, select defaultPlaceholder added
+## What Changed This Session
+- `references/fieldconfig-api.md`: Fixed FieldGroupConfig interface (`isGroup: true, groupLabel:` → `group: string`)
+- `references/theme-tokens.md`: Complete rewrite — all token names were wrong (`--axen-bg` → `--axen-color-bg`); corrected presets (`outlined`/`filled` → `default`/`subtle`/`green`)
+- `SKILL.md`: Install section trimmed; Layout table removed; Theme dark-mode block removed; custom theme shows CSS-rule approach; Stepper Basic + Complex have `initialValues` + full wrappers with real fields (no more `[...]` placeholders)
+- Chunks: 64 → 68

@@ -71,9 +71,8 @@ Visual grouping of fields into a bordered/titled section.
 
 ```ts
 interface FieldGroupConfig {
-  isGroup: true                    // REQUIRED discriminator — distinguishes from FieldConfig
-  groupLabel?: string              // section title displayed above grouped fields
-  fields: FieldConfig[]            // fields belonging to this group
+  group: string                    // Section title — the presence of this key identifies a group
+  fields: FieldConfig[]            // Fields belonging to this group
   colSpan?: number | ColSpanConfig
 }
 
@@ -81,11 +80,18 @@ interface FieldGroupConfig {
 const fields: (FieldConfig | FieldGroupConfig)[] = [
   { name: 'title', label: 'Title', type: 'text', colSpan: 12 },
   {
-    isGroup: true,
-    groupLabel: 'Contact Details',
+    group: 'Contact Details',      // NOTE: 'group' string, NOT 'isGroup: true'
     fields: [
       { name: 'email', label: 'Email', type: 'email', colSpan: 6 },
       { name: 'phone', label: 'Phone', type: 'tel',   colSpan: 6 },
+    ],
+  },
+  {
+    group: 'Address',
+    fields: [
+      { name: 'street', label: 'Street',   type: 'text', colSpan: 12 },
+      { name: 'city',   label: 'City',     type: 'text', colSpan: 4  },
+      { name: 'zip',    label: 'Zip Code', type: 'text', colSpan: 4  },
     ],
   },
 ]
