@@ -1,6 +1,7 @@
 # axen-form Skill Authoring Project
 
-> 🔗 **Playground Demo:** https://stackblitz.com/~/github.com/nasirBataruna/axen-form-playground
+> 🔗 **Playground Demo:** https://stackblitz.com/~/github.com/nasirBataruna/axen-form-playground  
+> 📦 **Source Repository:** https://github.com/nasirBataruna/axen-form-playground.git
 
 
 Comprehensive skill-authoring workspace for `@axenstudio/axen-form`, including:
