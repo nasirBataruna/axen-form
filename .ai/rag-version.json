@@ -1,0 +1,47 @@
+{
+  "manifest_schema": 1,
+  "rag_system_version": "0.7.0",
+  "project_id": "axen-form",
+  "workspace_id": "axen-form",
+  "bootstrapped_at": "2026-03-11",
+  "last_check_at": "2026-03-11",
+  "last_migration_at": "2026-03-11",
+  "assets": {
+    "copilot-instructions-template": {
+      "installed_version": "1.4.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "4f74c3c18ce348742fd4c7b2c4054cf06c15bfc7e9d60c62086520aab969ead3",
+      "installed_target_hash": "ea5a27d966eb61a5eab67a34b23f0091e6690b4e93622bcebc3282a58d071521"
+    },
+    "stub-current-focus": {
+      "installed_version": "1.0.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "e6394f178ce401374eb9fc80ecea8236396802a248efc931e180ef8aa6289f05",
+      "installed_target_hash": "635067afaffb9a05f8a80d88ed0a29c92e512c16743c61ab103a725a98372bc5"
+    },
+    "stub-open-loops": {
+      "installed_version": "1.0.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "de1537962e005198c2b90ce21b15ef468a79697781ad4c1c54f0eacd745082c4",
+      "installed_target_hash": "1de01d554e8071682d7cf23ee61e9f3c3a8246ca79c1588150053cab664d594a"
+    },
+    "stub-roadmap": {
+      "installed_version": "1.0.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "8f135b2ac113fea9e2dee62e5f63b73e3a38aedf33ed9de7aab400c63bfe3862",
+      "installed_target_hash": "5187dfe87b6a3ece4a08ce4f97b5b9f35236313a63cc1142a286d2e78ac78b71"
+    },
+    "stub-handoff": {
+      "installed_version": "1.0.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "96f66667a215dbc8aa85a3fbfb16de1d78f669df58d6e5b706705bb432b221e2",
+      "installed_target_hash": "a28594bbb7aa7e0291f0c462bbe67aff6309746a1c7db47db70f24a2b580d814"
+    },
+    "stub-decision-log": {
+      "installed_version": "1.0.0",
+      "installed_at": "2026-03-11",
+      "source_hash": "fcd1e7f9a2c15c0faf25049bb3e28b078804e97fe13bdea461122f3825861374",
+      "installed_target_hash": "afda4f635e8b5f2a80da2a8b0b545fe98c7cbea36cc89f2e1443a735b937ce56"
+    }
+  }
+}
